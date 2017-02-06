@@ -7,39 +7,49 @@ import java.util.stream.Collectors;
 import sg.edu.nus.comp.cs3219.model.LineStorage;
 import sg.edu.nus.comp.cs3219.module.Alphabetizer;
 import sg.edu.nus.comp.cs3219.module.CircularShifter;
+import sg.edu.nus.comp.cs3219.module.RequiredWordsFilter;
 
 public class MasterControl {
 	final private Alphabetizer alphabetizer;
 	final private CircularShifter shifter;
+	final private RequiredWordsFilter requiredWordsFilter;
 
 	private LineStorage rawInputLines;
+	private LineStorage shiftedLines;
 	private LineStorage resultLines;
+	
 
 	public MasterControl() {
 		// Storage
 		rawInputLines = new LineStorage();
+		shiftedLines = new LineStorage();
 		resultLines = new LineStorage();
 
 		// Sub-modules
-		shifter = new CircularShifter(resultLines);
+		shifter = new CircularShifter(shiftedLines);
 		alphabetizer = new Alphabetizer();
+		requiredWordsFilter = new RequiredWordsFilter(resultLines);
 
 		// Set up observation
 		rawInputLines.addObserver(shifter);
+		shiftedLines.addObserver(requiredWordsFilter);
 		resultLines.addObserver(alphabetizer);
+		
 	}
 
-	public List<String> run(List<String> input, Set<String> ignoredWords) {
+	public List<String> run(List<String> input, Set<String> ignoredWords, Set<String> requiredWords) {
 		rawInputLines.clearLines();
 		resultLines.clearLines();
 
-		// Set ignore words (make them lowercase for comparison)
+		// Set ignore words and requiredWords (make them lowercase for comparison)
 		shifter.setIgnoreWords(this.transformSetToLowercase(ignoredWords));
+		requiredWordsFilter.setRequiredWords(this.transformSetToLowercase(requiredWords));
 		
 		// Add data line by line
 		for (String line : input) {
 			rawInputLines.addLine(line);
 		}
+		
 		
 		return resultLines.getAll();
 	}
