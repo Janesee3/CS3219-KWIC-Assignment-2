@@ -157,6 +157,7 @@ public class MainView extends JFrame implements KwicUi {
 			public void actionPerformed(ActionEvent e) {
 				linesInput.setText("");
 				ignoreWordsInput.setText("");
+				requiredWordsInput.setText("");
 				resultsOutput.setText("");
 			}
 		});
