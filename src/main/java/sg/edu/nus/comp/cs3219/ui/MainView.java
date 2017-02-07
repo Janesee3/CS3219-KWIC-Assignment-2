@@ -194,7 +194,9 @@ public class MainView extends JFrame implements KwicUi {
 		String[] requiredWordsList = requiredWords.split("\n");
 		Set<String> requiredWordsSet = new HashSet<>();
 		for (String word : requiredWordsList) {
-			requiredWordsSet.add(word);
+			if (!word.trim().isEmpty()) {
+		    	requiredWordsSet.add(word);
+			}
 		}
 		return requiredWordsSet;
 	}

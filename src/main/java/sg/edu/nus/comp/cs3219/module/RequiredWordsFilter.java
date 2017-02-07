@@ -57,6 +57,9 @@ public class RequiredWordsFilter implements Observer {
 	}
 	
 	private boolean isRequiredWord(String word) {
+		if (requiredWords.isEmpty()) {
+			return true;
+		}
 		return requiredWords.contains(word.toLowerCase());
 	}
 
